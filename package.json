@@ -27,6 +27,7 @@
         }
     },
     "scripts": {
+        "page-dev": "next dev",
         "dev": "concurrently \"next dev\" \"wait-on http://localhost:3001 && cross-env NODE_ENV=development electron .\"",
         "build": "next build && tsc -p tsconfig.electron.json && electron-builder",
         "start": "next start",
