@@ -1,0 +1,14 @@
+[
+    {
+        "output": "4\noxoo\nxoox\n",
+        "input": "Yes\n"
+    },
+    {
+        "output": "5\nxxxxx\nooooo\n",
+        "input": "No\n"
+    },
+    {
+        "output": "10\nxoooxoxxxo\nooxooooxoo\n",
+        "input": "Yes\n"
+    }
+]
