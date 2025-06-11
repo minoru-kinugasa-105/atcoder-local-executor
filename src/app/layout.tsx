@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
-import './globals.scss';
+
+import './styles/base/reset.scss';
+import './styles/base/global.scss';
 
 export const metadata: Metadata = {
     title: 'AtCoder Local Executor',
