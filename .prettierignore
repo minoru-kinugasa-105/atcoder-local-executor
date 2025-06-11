@@ -1,0 +1,9 @@
+/node_modules
+/dist
+/public
+tsconfig.json
+Dockerfile
+docker-compose.yaml
+.vscode
+.env
+/eslint.config.js
