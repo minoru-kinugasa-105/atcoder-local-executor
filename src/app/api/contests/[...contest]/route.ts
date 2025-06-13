@@ -6,23 +6,22 @@ import { fetchContest } from '@/lib/fetch-contest';
 
 export async function GET(request: Request, { params }: { params: any }) {
     const requestParams = await params;
-    const [contestName, problemName] = requestParams.contest;
-    console.log('Request params:', { contestName, problemName });
+    const [contestPlatform, contestName, problemName] = requestParams.contest;
+    console.log('Request params:', { contestPlatform, contestName, problemName });
 
-    if (!contestName || !problemName) {
+    if (!contestPlatform || !contestName || !problemName) {
         return NextResponse.json(
             {
-                error: 'コンテスト名と問題名をエンドポイントに指定してください。'
+                error: 'プラットフォームとコンテスト名と問題名をエンドポイントに指定してください。'
             },
             { status: 400 }
         );
     }
 
-    // const { platform } = await request.json();
-    const platform = 'atcoder';
     const filePath = path.join(
         process.cwd(),
         'src/data',
+        contestPlatform,
         contestName,
         `${problemName}.json`
     );
@@ -37,7 +36,7 @@ export async function GET(request: Request, { params }: { params: any }) {
 
     // ファイルが存在しなければスクレイピング
     const contestData = await fetchContest(
-        platform,
+        contestPlatform,
         contestName,
         problemName
     ).catch((e) => {

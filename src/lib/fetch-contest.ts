@@ -3,10 +3,7 @@ import { existsSync } from 'fs';
 import path from 'path';
 import { JSDOM } from 'jsdom';
 
-interface TestCase {
-    input: string | null | undefined;
-    output: string | null | undefined;
-}
+import type { TestCase } from '@/types/Judge';
 
 export async function fetchContest(
     platform: string,
@@ -37,7 +34,7 @@ export async function fetchContest(
             .map((part, index) => {
                 const pre = part.querySelector('pre');
                 const text = pre?.textContent;
-                const type = index % 2 === 0 ? 'output' : 'input';
+                const type = index % 2 === 0 ? 'input' : 'output';
                 return { [type]: text } as Partial<TestCase>;
             })
             .reduce<TestCase[]>((acc, current, index) => {
@@ -54,6 +51,7 @@ export async function fetchContest(
         const filePath = path.join(
             process.cwd(),
             'src/data',
+            platform,
             contestName,
             `${problemName}.json`
         );
@@ -98,6 +96,7 @@ async function allFetchContest(platform: string, contestName: string) {
     const allDataFilePath = path.join(
         process.cwd(),
         'src/data',
+        platform,
         contestName,
         'data.json'
     );
