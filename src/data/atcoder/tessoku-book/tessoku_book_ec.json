@@ -1,0 +1,6 @@
+[
+    {
+        "input": "11 3\nmississippi\n5 8\n6 10\n2 8\n",
+        "output": "Yes\nNo\nYes\n"
+    }
+]

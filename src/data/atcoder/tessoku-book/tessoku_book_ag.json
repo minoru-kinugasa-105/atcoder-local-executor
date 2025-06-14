@@ -1,0 +1,10 @@
+[
+    {
+        "input": "2\n7 7\n",
+        "output": "Second\n"
+    },
+    {
+        "input": "2\n5 8\n",
+        "output": "First\n"
+    }
+]

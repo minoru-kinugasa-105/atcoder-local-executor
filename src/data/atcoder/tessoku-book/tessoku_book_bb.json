@@ -1,0 +1,6 @@
+[
+    {
+        "input": "3\n1 tanaka 49\n1 suzuki 50\n2 tanaka\n",
+        "output": "49\n"
+    }
+]

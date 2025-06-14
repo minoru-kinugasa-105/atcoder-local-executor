@@ -1,0 +1,10 @@
+[
+    {
+        "input": "11\nprogramming\n",
+        "output": "4\n"
+    },
+    {
+        "input": "7\nabcdcba\n",
+        "output": "7\n"
+    }
+]

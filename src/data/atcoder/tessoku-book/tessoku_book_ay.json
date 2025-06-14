@@ -1,0 +1,6 @@
+[
+    {
+        "input": "5\n1 futuremap\n1 howtospeak\n2\n3\n2\n",
+        "output": "howtospeak\nfuturemap\n"
+    }
+]

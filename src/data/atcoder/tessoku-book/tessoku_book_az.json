@@ -1,0 +1,6 @@
+[
+    {
+        "input": "5\n1 taro\n1 hanako\n2\n3\n2\n",
+        "output": "taro\nhanako\n"
+    }
+]

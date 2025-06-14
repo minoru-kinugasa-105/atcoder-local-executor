@@ -1,0 +1,10 @@
+[
+    {
+        "input": "6\nA kyopuro\nA tessoku\nB book\nD\nC\nD\n",
+        "output": "kyopuro\nbook\n"
+    },
+    {
+        "input": "15\nB prefixsum\nB binsearch\nA dp\nB math\nC\nD\nC\nD\nB heuristics\nB ds\nB graph\nC\nD\nC\nD\n",
+        "output": "binsearch\nmath\nheuristics\ngraph\n"
+    }
+]

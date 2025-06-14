@@ -1,0 +1,10 @@
+[
+    {
+        "input": "mynavi\nmonday\n",
+        "output": "3\n"
+    },
+    {
+        "input": "tokyo\nkyoto\n",
+        "output": "3\n"
+    }
+]

@@ -1,0 +1,14 @@
+[
+    {
+        "input": "tokyo\nkyoto\n",
+        "output": "4\n"
+    },
+    {
+        "input": "competitive\nprogramming\n",
+        "output": "10\n"
+    },
+    {
+        "input": "abcdef\nbdf\n",
+        "output": "3\n"
+    }
+]
