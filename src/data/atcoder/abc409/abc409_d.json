@@ -1,0 +1,6 @@
+[
+    {
+        "input": "3\n7\natcoder\n1\nx\n5\nsnuke\n",
+        "output": "acodert\nx\nnsuke\n"
+    }
+]

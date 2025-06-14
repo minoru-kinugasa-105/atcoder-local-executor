@@ -10,7 +10,6 @@ export async function fetchContest(
     contestName: string,
     problemName: string
 ): Promise<TestCase[]> {
-    console.log('fetchContest\n'.repeat(10));
     const url = `https://atcoder.jp/contests/${contestName}/tasks/${problemName}`;
     let data: TestCase[] = [];
 
@@ -63,6 +62,7 @@ export async function fetchContest(
         const allDataFilePath = path.join(
             process.cwd(),
             'src/data',
+            platform,
             contestName,
             'data.json'
         );
@@ -71,8 +71,8 @@ export async function fetchContest(
             const fileContent = await readFile(allDataFilePath, 'utf-8');
             allData = JSON.parse(fileContent);
         } catch (error) {
-            // まだFetchしていない場合はフラグ保存用ファイルを作成しAllFetch
-            allData = { isAllFetched: false };
+            // まだFetchしていない場合は作成しAllFetch
+            allData = { isAllFetched: false, problems: [] };
             await writeFile(allDataFilePath, JSON.stringify(allData, null, 4));
         }
         if (!allData.isAllFetched) {
@@ -86,13 +86,6 @@ export async function fetchContest(
 }
 
 async function allFetchContest(platform: string, contestName: string) {
-    const url = `https://atcoder.jp/contests/${contestName}/tasks`;
-    const response = await fetch(url);
-    const html = await response.text();
-    const dom = new JSDOM(html);
-    const doc = dom.window.document;
-    const trs = Array.from(doc.querySelectorAll('tbody tr'));
-
     const allDataFilePath = path.join(
         process.cwd(),
         'src/data',
@@ -100,29 +93,25 @@ async function allFetchContest(platform: string, contestName: string) {
         contestName,
         'data.json'
     );
-    await writeFile(
-        allDataFilePath,
-        JSON.stringify({ isAllFetched: true }, null, 4)
-    );
+    const fileContent = await readFile(allDataFilePath, 'utf-8');
+    const data = JSON.parse(fileContent);
+    data.isAllFetched = true;
+    await writeFile(allDataFilePath, JSON.stringify(data, null, 4));
 
-    for (const tr of trs) {
-        const aTag = tr.querySelector('a');
-        if (aTag) {
-            const problemName = aTag.href.split('tasks/')[1];
-
-            // すでにFetchしているデータであればスキップ
-            const problemFilePath = path.join(
-                process.cwd(),
-                'src/data',
-                contestName,
-                `${problemName}.json`
-            );
-            if (existsSync(problemFilePath)) {
-                continue;
-            }
-
-            await fetchContest(platform, contestName, problemName);
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+    for (const problem of data.problems) {
+        // すでにFetchしているデータであればスキップ
+        const problemFilePath = path.join(
+            process.cwd(),
+            'src/data',
+            platform,
+            contestName,
+            `${problem}.json`
+        );
+        if (existsSync(problemFilePath)) {
+            continue;
         }
+
+        await fetchContest(platform, contestName, problem);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 }
