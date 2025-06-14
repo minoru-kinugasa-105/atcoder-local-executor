@@ -82,6 +82,8 @@ int main() {
     }, [form.problem]);
 
     async function handleRunAll() {
+        if (testCases.length === 0) return;
+
         const resultsSection = document.getElementById('results');
         if (resultsSection) {
             resultsSection.scrollIntoView({ behavior: 'smooth' });
@@ -380,7 +382,12 @@ int main() {
                                     }
                                 />
 
-                                <button onClick={handleRunAll}>
+                                <button
+                                    onClick={handleRunAll}
+                                    style={{
+                                        marginTop: '1rem'
+                                    }}
+                                >
                                     <Play />
                                     全てのテストケースを実行
                                 </button>

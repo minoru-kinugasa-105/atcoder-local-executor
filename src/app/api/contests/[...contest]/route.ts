@@ -77,7 +77,7 @@ export async function GET(request: Request, { params }: { params: any }) {
         );
         const fileStat = await stat(problemFilePath).catch(() => null);
 
-        if (!fileStat) {
+        if (!fileStat && allData.problems[0]) {
             const testCases = await fetchContest(
                 platform,
                 contest,
