@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import type { TestCase, Result } from '@/types/Judge';
 
 import { Copy, Play } from 'lucide-react';
 
 import '@/styles/layouts/components/section.scss';
+
+import type * as MonacoType from 'monaco-editor';
 
 export default function Home() {
     const sourceCode = `
@@ -199,6 +201,101 @@ int main() {
         setTestCases(data);
     }
 
+    /*
+     * editor initial
+     */
+    const [isDarkMode, setIsDarkMode] = useState(true);
+    const editorRef = useRef<HTMLDivElement>(null);
+    const editorInstanceRef =
+        useRef<MonacoType.editor.IStandaloneCodeEditor | null>(null);
+
+    useEffect(() => {
+        let isMounted = true;
+        let editor: MonacoType.editor.IStandaloneCodeEditor | null = null;
+
+        const loadMonacoEditor = async () => {
+            const monaco = await import('monaco-editor');
+            if (!isMounted) return;
+
+            editor = monaco.editor.create(editorRef.current!, {
+                language: 'cpp',
+                theme: isDarkMode ? 'vs-dark' : 'vs-light',
+                fontSize: 13,
+                fontFamily: 'Monaco, Consolas, "Courier New", monospace',
+                automaticLayout: true,
+                lineNumbers: 'on',
+                minimap: { enabled: true },
+                scrollBeyondLastLine: true,
+                wordWrap: 'on',
+                tabSize: 4,
+                insertSpaces: true,
+                renderWhitespace: 'boundary',
+                renderLineHighlight: 'all',
+                glyphMargin: true,
+                folding: true,
+                formatOnType: true,
+                formatOnPaste: true,
+                smoothScrolling: true,
+                mouseWheelScrollSensitivity: 0.5,
+                cursorBlinking: 'solid',
+                cursorStyle: 'line',
+                autoClosingBrackets: 'always',
+                autoClosingQuotes: 'always',
+                autoIndent: 'full',
+                autoSurround: 'brackets',
+                scrollbar: {
+                    vertical: 'visible',
+                    horizontal: 'visible',
+                    useShadows: true,
+                    verticalScrollbarSize: 10,
+                    horizontalScrollbarSize: 10,
+                    alwaysConsumeMouseWheel: false,
+                    verticalHasArrows: false,
+                    horizontalHasArrows: false,
+                    verticalSliderSize: 6,
+                    horizontalSliderSize: 6,
+                    arrowSize: 11
+                }
+            });
+
+            editorInstanceRef.current = editor;
+
+            // エディターの初期値を設定
+            editor.setValue(sourceCode);
+
+            // コンテンツが変更されたときにソースコードを更新
+            editor.onDidChangeModelContent(() => {
+                if (!editor) return;
+
+                setForm((prev) => ({
+                    ...prev,
+                    source: editor!.getValue()
+                }));
+            });
+
+            // カーソル位置の変更を監視
+            editor.onDidChangeCursorPosition(() => {
+                if (editor) {
+                    const position = editor.getPosition();
+                    if (position) {
+                        editor.revealPositionInCenterIfOutsideViewport(
+                            position
+                        );
+                    }
+                }
+            });
+        };
+
+        loadMonacoEditor();
+
+        return () => {
+            isMounted = false;
+            if (editor) {
+                editor.dispose();
+            }
+        };
+    }, [isDarkMode, editorRef.current]);
+
     return (
         <>
             <main className="main">
@@ -367,25 +464,46 @@ int main() {
                         <section className="section">
                             <div className="section-headline">
                                 <h2>ソースコード</h2>
+                                <div>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="theme"
+                                            value="dark"
+                                            checked={isDarkMode}
+                                            onChange={() => setIsDarkMode(true)}
+                                        />
+                                        Dark Mode
+                                    </label>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="theme"
+                                            value="light"
+                                            checked={!isDarkMode}
+                                            onChange={() =>
+                                                setIsDarkMode(false)
+                                            }
+                                        />
+                                        Light Mode
+                                    </label>
+                                </div>
                             </div>
                             <div className="section-body">
-                                <textarea
+                                <div
+                                    ref={editorRef}
                                     style={{
-                                        display: 'block'
+                                        height: '70vh',
+                                        width: '100%',
+                                        border: '1px solid #ccc',
+                                        margin: '0.5rem 0'
                                     }}
-                                    value={form.source}
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            source: e.target.value
-                                        })
-                                    }
-                                />
+                                ></div>
 
                                 <button
                                     onClick={handleRunAll}
                                     style={{
-                                        marginTop: '1rem'
+                                        marginTop: '2rem'
                                     }}
                                 >
                                     <Play />
