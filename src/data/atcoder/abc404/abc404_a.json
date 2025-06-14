@@ -1,0 +1,14 @@
+[
+    {
+        "input": "a\n",
+        "output": "d\n"
+    },
+    {
+        "input": "abcdfhijklmnopqrstuvwxyz\n",
+        "output": "e\n"
+    },
+    {
+        "input": "qazplwsxokmedcijnrfvuhbgt\n",
+        "output": "y\n"
+    }
+]

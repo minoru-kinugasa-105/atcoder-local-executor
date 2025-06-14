@@ -225,7 +225,7 @@ int main() {
                 automaticLayout: true,
                 lineNumbers: 'on',
                 minimap: { enabled: true },
-                scrollBeyondLastLine: true,
+                scrollBeyondLastLine: false,
                 wordWrap: 'on',
                 tabSize: 4,
                 insertSpaces: true,
