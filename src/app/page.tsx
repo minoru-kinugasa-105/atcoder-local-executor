@@ -63,6 +63,10 @@ int main() {
         source: sourceCode,
         language: 'cpp'
     });
+    const [userdataForm, setUserdataForm] = useState({
+        username: '',
+        password: ''
+    });
 
     const [testCases, setTestCases] = useState<TestCase[]>([]);
     const [problems, setProblems] = useState<string[]>([]);
@@ -82,6 +86,41 @@ int main() {
             handleFetchTestCases();
         }
     }, [form.problem]);
+
+    async function handleGetUserdata() {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}auth`
+        );
+        const data = await response.json();
+        console.warn(data);
+        setUserdataForm({
+            username: data.username,
+            password: data.password
+        });
+    }
+
+    async function handleSaveUserdata() {
+        if (!userdataForm.username || !userdataForm.password) {
+            if (!userdataForm.username && !userdataForm.password) {
+                alert('ユーザー名とパスワードを入力してください');
+            } else if (!userdataForm.username) {
+                alert('ユーザー名を入力してください');
+            } else if (!userdataForm.password) {
+                alert('パスワードを入力してください');
+            }
+            return;
+        }
+
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}auth`,
+            {
+                method: 'PATCH',
+                body: JSON.stringify(userdataForm)
+            }
+        );
+        const data = await response.json();
+        console.warn(data);
+    }
 
     async function handleRunAll() {
         if (testCases.length === 0) return;
@@ -307,6 +346,60 @@ int main() {
                                 <h2>ベース情報</h2>
                             </div>
                             <div className="section-body">
+                                <div className="component">
+                                    <div className="component-headline">
+                                        <h3>ユーザーとして実行</h3>
+                                        <p>
+                                            リアルタイムで開催中のコンテストに参加する際にはユーザー情報が必須となります。
+                                            <br />
+                                            このデータは外部に送信することはありません。あなたのアプリ内にのみ保存されます。
+                                        </p>
+                                    </div>
+                                    <div className="component-body">
+                                        <label>
+                                            ユーザー名
+                                            <input
+                                                type="text"
+                                                name="username"
+                                                value={userdataForm.username}
+                                                onChange={(e) =>
+                                                    setUserdataForm({
+                                                        ...userdataForm,
+                                                        username: e.target.value
+                                                    })
+                                                }
+                                            />
+                                        </label>
+                                        <label>
+                                            パスワード
+                                            <input
+                                                style={{ marginTop: '0.5rem' }}
+                                                type="text"
+                                                name="password"
+                                                value={userdataForm.password}
+                                                onChange={(e) =>
+                                                    setUserdataForm({
+                                                        ...userdataForm,
+                                                        password: e.target.value
+                                                    })
+                                                }
+                                            />
+                                        </label>
+                                        <button
+                                            onClick={handleGetUserdata}
+                                            style={{ marginRight: '0.5rem' }}
+                                        >
+                                            現在保存しているデータを取得
+                                        </button>
+                                        <button
+                                            onClick={handleSaveUserdata}
+                                            style={{ marginTop: '0.5rem' }}
+                                        >
+                                            保存
+                                        </button>
+                                    </div>
+                                </div>
+
                                 <div className="component">
                                     <div className="component-headline">
                                         <h3>プラットフォーム</h3>

@@ -35,8 +35,10 @@
         "next-dev": "next dev"
     },
     "dependencies": {
+        "axios-cookiejar-support": "^6.0.2",
         "concurrently": "^9.1.2",
         "cross-env": "^7.0.3",
+        "fetch-cookie": "^3.1.0",
         "jsdom": "^26.1.0",
         "lucide-react": "^0.514.0",
         "monaco-editor": "^0.52.2",
@@ -46,6 +48,7 @@
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "sass": "^1.89.2",
+        "tough-cookie": "^5.1.2",
         "wait-on": "^8.0.3"
     },
     "devDependencies": {

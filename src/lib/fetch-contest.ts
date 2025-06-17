@@ -2,6 +2,7 @@ import { writeFile, mkdir, readFile } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
 import { JSDOM } from 'jsdom';
+import { fetchAsUser } from '@/lib/fetch-as-user';
 
 import type { TestCase } from '@/types/Judge';
 
@@ -14,7 +15,10 @@ export async function fetchContest(
     let data: TestCase[] = [];
 
     try {
-        const response = await fetch(url);
+        let response = await fetch(url);
+        if (response.status === 401) {
+            response = await fetchAsUser(url);
+        }
 
         const html = await response.text();
 
